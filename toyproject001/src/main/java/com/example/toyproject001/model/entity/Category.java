@@ -1,29 +1,28 @@
 package com.example.toyproject001.model.entity;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-//@ToString(exclude = {"user", "item"})
-public class OrderDetail {
+public class Category {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String status;
+    private String type;
 
-    private LocalDateTime arrivalDate;
-
-    private Integer quantity;
-
-    private Integer totalPrice;
+    private String title;
 
     private LocalDateTime createdAt;
 
@@ -34,11 +33,3 @@ public class OrderDetail {
     private String updatedBy;
 
 }
-    //private LocalDateTime orderAt;
-//    //N:1
-//    @ManyToOne
-//    private User user; //hibernate에서 상관관계 정리
-//
-//    @ManyToOne
-//    private Item item;
-
