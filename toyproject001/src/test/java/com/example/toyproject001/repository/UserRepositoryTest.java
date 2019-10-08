@@ -1,6 +1,7 @@
 package com.example.toyproject001.repository;
 
 import com.example.toyproject001.Toyproject001ApplicationTests;
+import com.example.toyproject001.model.entity.Item;
 import com.example.toyproject001.model.entity.User;
 import org.junit.Assert;
 import org.junit.Test;
@@ -36,13 +37,16 @@ public class UserRepositoryTest extends Toyproject001ApplicationTests {
     }
 
     @Test
+    @Transactional
     public void read(){
-        Optional<User> user = userRepository.findById(2L);
+        Optional<User> user = userRepository.findByAccountAndEmail("TestUser001", "TestUser001@test.com");
 
         user.ifPresent(selectUser ->{
-            System.out.println("user : " + selectUser);
-            System.out.println(("email : "+ selectUser.getEmail()));
 
+            selectUser.getOrderDetailList().stream().forEach(detail->{
+                    Item item = detail.getItem();
+                    System.out.println(item);
+            });
         });
     }
 

@@ -37,4 +37,12 @@ public class User {
     @Column(name = "update_by")
     private String updatedBy;
 
+    //fetch type
+    // LAZY : 지연로딩 - 따로 메소드를 호출하지 않는 이상(get method),
+    //        연관관계가 있는 테이블에서 select를 하지 않겠다.
+    // EAGER : 즉시로딩 - 연관관계가 설정되어있는 모든 table에게서 join을 걸어 즉시 로딩한다.
+    //        table 의 관계가 (1:1)일때 주로 쓰인다.
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<OrderDetail> orderDetailList;
 }
