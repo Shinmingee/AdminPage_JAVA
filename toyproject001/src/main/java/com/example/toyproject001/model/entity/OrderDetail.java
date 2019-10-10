@@ -5,13 +5,14 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-//@ToString(exclude = {"user", "item"})
+@ToString(exclude = {"orderGroup", "item"})
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +24,7 @@ public class OrderDetail {
 
     private Integer quantity;
 
-    private Integer totalPrice;
+    private BigDecimal totalPrice;
 
     private LocalDateTime createdAt;
 
@@ -32,6 +33,14 @@ public class OrderDetail {
     private LocalDateTime updatedAt;
 
     private String updatedBy;
+
+    //OrderDetail N : 1 Item
+    @ManyToOne
+    private Item item;
+
+    //OrderDetail N : 1 OrderGroup
+    @ManyToOne
+    private OrderGroup orderGroup;
 
 }
     //private LocalDateTime orderAt;

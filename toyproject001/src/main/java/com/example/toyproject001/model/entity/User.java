@@ -3,6 +3,7 @@ package com.example.toyproject001.model.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -35,11 +36,15 @@ public class User {
 
     private LocalDateTime createdAt;
 
-    private String cratedBy;
+    private String createdBy;
 
     private LocalDateTime updatedAt;
 
     private String updatedBy;
+
+    //OrderGroup N :1 User
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<OrderGroup> orderGroupList;
 
     //fetch type
     // LAZY : 지연로딩 - 따로 메소드를 호출하지 않는 이상(get method),

@@ -22,32 +22,70 @@ public class UserRepositoryTest extends Toyproject001ApplicationTests {
 
     @Test
     public void crate(){
-        //String sql = insert int user (%s, %s, %d) value (account, email, age);
+        String account = "Test01";
+        String password = "Test01";
+        String status = "REGISTERED";
+        String email = "TEST01@test.com";
+        String phoneNumber = "010-1111-2222";
+        LocalDateTime registeredAt = LocalDateTime.now();
+        LocalDateTime createdAt = LocalDateTime.now();
+        String createdBy = "AdminServer";
+
         User user = new User();
-        user.setAccount("TestUser001");
-        user.setEmail("TestUser03@test.com");
-        user.setPhoneNumber("010-1111-3333");
-        user.setCreatedAt(LocalDateTime.now());
-        user.setCratedBy("TestUser001");
+
+        user.setAccount(account);
+        user.setPassword(password);
+        user.setStatus(status);
+        user.setPhoneNumber(phoneNumber);
+        user.setEmail(email);
+        user.setRegisteredAt(registeredAt);
+        user.setCreatedAt(createdAt);
+        user.setCreatedBy(createdBy);
 
         User newUser = userRepository.save(user);
 
-        System.out.println("newUser : " + newUser);
-
+        Assert.assertNotNull(newUser);
+        Assert.assertEquals(newUser.getAccount(), account);
     }
 
     @Test
     @Transactional
     public void read(){
-        Optional<User> user = userRepository.findByAccountAndEmail("TestUser001", "TestUser001@test.com");
 
-        user.ifPresent(selectUser ->{
+        //String account = "Test01";
+        //String email = "TEST01@test.com";
+        //Optional<User> optionalUser = userRepository.findByAccountAndEmail(account, email);
 
-            selectUser.getOrderDetailList().stream().forEach(detail->{
-                    Item item = detail.getItem();
-                    System.out.println(item);
+        String phoneNumber = "010-1111-2222";
+
+        User user = userRepository.findFirstByPhoneNumberOrderByIdDesc(phoneNumber);
+
+        if(user != null){
+            user.getOrderGroupList().stream().forEach(orderGroup -> {
+                System.out.println("-----------------주문묶음-------------------");
+                System.out.println("수령인 :" + orderGroup.getRevName());
+                System.out.println("수령지 : " + orderGroup.getRevAddress());
+                System.out.println("주문 총 수량 : " + orderGroup.getTotalQuantity());
+                System.out.println("주문 총 금액 : " +orderGroup.getTotalPrice());
+                System.out.println("주문 상태 : "+ orderGroup.getStatus());
+
+                System.out.println("-----------------주문상세------------------");
+                orderGroup.getOrderDetailList().stream().forEach(orderDetail -> {
+                    System.out.println("상품 카테고리 : "+ orderDetail.getItem().getPartner().getCategory().getType());
+                    System.out.println("상품 이름 : " +  orderDetail.getItem().getName());
+                    System.out.println("상품 브랜드 : " + orderDetail.getItem().getBrandName());
+                    System.out.println("고객 센터 번호 : "+ orderDetail.getItem().getPartner().getCallCenter()) ;
+                    System.out.println("도착 일자 : " + orderDetail.getArrivalDate());
+                    System.out.println("주문 상태 : " +orderDetail.getStatus());
+
+                });
+
             });
-        });
+
+        }
+
+        Assert.assertNotNull(user);
+
     }
 
     @Test

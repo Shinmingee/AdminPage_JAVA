@@ -8,9 +8,12 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+    //JPA 의 Query Method
+    Optional<User> findByAccountAndEmail(String account, String email);
+
+    User findFirstByPhoneNumberOrderByIdDesc(String phoneNumber);
 
 }
 //    //select * form user where id=? and email = ?
-//    //JPA 의 Query Method
-//    Optional<User> findByAccountAndEmail(String account, String email);
+//
 

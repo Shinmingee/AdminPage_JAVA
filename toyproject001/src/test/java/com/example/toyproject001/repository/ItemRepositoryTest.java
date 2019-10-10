@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class ItemRepositoryTest extends Toyproject001ApplicationTests {
@@ -17,9 +18,16 @@ public class ItemRepositoryTest extends Toyproject001ApplicationTests {
     public void create(){
         Item item = new Item();
 
-        item.setName("노트북");
-        item.setPrice(100000);
-        item.setContent("LG 그램 노트북 짱");
+        item.setStatus("UNREGISTERED");
+        item.setName("LG 노트북");
+        item.setTitle("LG 노트북 P200");
+        item.setPrice(1500000);
+        item.setContent("2018년도 노트북 입니다");
+        item.setBrandName("LG");
+        item.setRegisteredAt(LocalDateTime.now());
+        item.setCreatedAt(LocalDateTime.now());
+        item.setCreatedBy("Partner01");
+        //item.setPartnerId(3L); //partner01 id = 3  Long -> partner
 
         Item newItem = itemRepository.save(item);
         Assert.assertNotNull(newItem);

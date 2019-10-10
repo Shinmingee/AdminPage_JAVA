@@ -3,17 +3,16 @@ package com.example.toyproject001.model.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@ToString(exclude = {"category"})
 public class Partner {
 
     @Id
@@ -40,9 +39,13 @@ public class Partner {
 
     private LocalDateTime createdAt;
 
-    private String cratedBy;
+    private String createdBy;
 
     private LocalDateTime updatedAt;
 
     private String updatedBy;
+
+    //Partner N:1 Category
+    @ManyToOne
+    private Category category;
 }
