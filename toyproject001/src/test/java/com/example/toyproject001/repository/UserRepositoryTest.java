@@ -42,6 +42,14 @@ public class UserRepositoryTest extends Toyproject001ApplicationTests {
         user.setCreatedAt(createdAt);
         user.setCreatedBy(createdBy);
 
+        //객체 생성시, @Builder
+        User u = User.builder()
+                .account(account)
+                .password(password)
+                .email(email)
+                .status(status)
+                .build();
+
         User newUser = userRepository.save(user);
 
         Assert.assertNotNull(newUser);
@@ -59,6 +67,14 @@ public class UserRepositoryTest extends Toyproject001ApplicationTests {
         String phoneNumber = "010-1111-2222";
 
         User user = userRepository.findFirstByPhoneNumberOrderByIdDesc(phoneNumber);
+
+        //update user -> @Accessors(chain = true)
+        user
+                .setEmail("")
+                .setPhoneNumber("")
+                .setStatus("");
+
+        User u = new User().setAccount("").setEmail("").setPassword("");
 
         if(user != null){
             user.getOrderGroupList().stream().forEach(orderGroup -> {

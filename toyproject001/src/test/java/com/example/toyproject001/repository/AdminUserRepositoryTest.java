@@ -21,8 +21,8 @@ public class AdminUserRepositoryTest extends Toyproject001ApplicationTests {
         String password = "AdminUser01";
         String status = "REGISTERED";
         String role = "PARTNER";
-        LocalDateTime createdAt = LocalDateTime.now();
-        String createdBy = "Admin Server";
+//        LocalDateTime createdAt = LocalDateTime.now();
+//        String createdBy = "Admin Server";
 
         AdminUser adminUser = new AdminUser();
 
@@ -30,14 +30,16 @@ public class AdminUserRepositoryTest extends Toyproject001ApplicationTests {
         adminUser.setPassword(password);
         adminUser.setStatus(status);
         adminUser.setRole(role);
-        adminUser.setCreatedAt(createdAt);
-        adminUser.setCreatedBy(createdBy);
+//        adminUser.setCreatedAt(createdAt);
+//        adminUser.setCreatedBy(createdBy);
 
         AdminUser newAdminUser = adminUserRepository.save(adminUser);
-
         Assert.assertNotNull(adminUser);
-        Assert.assertEquals(newAdminUser.getAccount(),account);
-        Assert.assertEquals(newAdminUser.getPassword(),password);
+
+        newAdminUser.setAccount("CHANGE");
+        adminUserRepository.save(newAdminUser);
+//        Assert.assertEquals(newAdminUser.getAccount(),account);
+//        Assert.assertEquals(newAdminUser.getPassword(),password);
     }
 
     @Test
