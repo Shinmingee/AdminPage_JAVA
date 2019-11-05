@@ -1,5 +1,8 @@
 package com.example.toyproject001.model.entity;
 
+import com.example.toyproject001.model.enumclass.OrderGroupOrderType;
+import com.example.toyproject001.model.enumclass.OrderGroupPaymentType;
+import com.example.toyproject001.model.enumclass.OrderGroupStatus;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
@@ -27,15 +30,18 @@ public class OrderGroup {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderGroupStatus status; //주문상태 : 대기(WAITING), 완료(COMPLETE)
 
-    private String orderType;
+    @Enumerated(EnumType.STRING)
+    private OrderGroupOrderType orderType; //주문 타입 : 일괄(ALL), 개별(Individual)
 
     private String revAddress;
 
     private String revName;
 
-    private String paymentType;
+    @Enumerated(EnumType.STRING)
+    private OrderGroupPaymentType paymentType; //납부 방법 : 카드(CARD),현금(CASH), 계좌이체(ACCOUNT), 포인트(POINT)
 
     private BigDecimal totalPrice;
 

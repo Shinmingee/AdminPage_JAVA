@@ -2,6 +2,7 @@ package com.example.toyproject001.repository;
 
 import com.example.toyproject001.Toyproject001ApplicationTests;
 import com.example.toyproject001.model.entity.Item;
+import com.example.toyproject001.model.enumclass.ItemStatus;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,10 @@ public class ItemRepositoryTest extends Toyproject001ApplicationTests {
     public void create(){
         Item item = new Item();
 
-        item.setStatus("UNREGISTERED");
+        item.setStatus(ItemStatus.REGISTERED);
         item.setName("LG 노트북");
         item.setTitle("LG 노트북 P200");
-        item.setPrice(1500000);
+        //item.setPrice();
         item.setContent("2018년도 노트북 입니다");
         item.setBrandName("LG");
         item.setRegisteredAt(LocalDateTime.now());

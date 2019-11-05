@@ -1,5 +1,7 @@
 package com.example.toyproject001.model.entity;
 
+import com.example.toyproject001.model.enumclass.AdminUserRole;
+import com.example.toyproject001.model.enumclass.AdminUserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,19 +33,21 @@ public class AdminUser {
 
     private String password;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private AdminUserStatus status; //회원상태: 등록(REGISTERED), 미등록(UNREGISTERED)
 
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private AdminUserRole role; // 회원권한: 파트너(PARTNER), 사용자(USER), 관리자(ADMINISTER)
 
     private LocalDateTime lastLoginAt;
 
-    private LocalDateTime passwordUpatedAt;
+    private LocalDateTime passwordUpdatedAt;
 
     private Integer loginFailCount;
 
     private LocalDateTime registeredAt;
 
-    private LocalDateTime unregisteredBy;
+    private LocalDateTime unregisteredAt;
 
     @CreatedDate
     private LocalDateTime createdAt;

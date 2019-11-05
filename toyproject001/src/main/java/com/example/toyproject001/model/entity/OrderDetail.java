@@ -1,4 +1,5 @@
 package com.example.toyproject001.model.entity;
+import com.example.toyproject001.model.enumclass.OrderDetailStatus;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
@@ -24,7 +25,8 @@ public class OrderDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderDetailStatus status; //주문상태 : 대기(WAITING), 완료(COMPLETE)
 
     private LocalDateTime arrivalDate;
 
@@ -56,7 +58,7 @@ public class OrderDetail {
     //private LocalDateTime orderAt;
 //    //N:1
 //    @ManyToOne
-//    private User user; //hibernate에서 상관관계 정리
+//    private User user; //hibernate 에서 상관관계 정리
 //
 //    @ManyToOne
 //    private Item item;

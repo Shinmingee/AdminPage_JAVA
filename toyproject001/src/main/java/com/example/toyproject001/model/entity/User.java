@@ -1,5 +1,6 @@
 package com.example.toyproject001.model.entity;
 
+import com.example.toyproject001.model.enumclass.UserStatus;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
@@ -30,7 +31,8 @@ public class User {
 
     private String password;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private UserStatus status; //사용자 상태: 등록(REGISTERED), 미등록(UNREGISTERED)
 
     private String email;
 
@@ -38,7 +40,7 @@ public class User {
 
     private LocalDateTime registeredAt;
 
-    private LocalDateTime unregisteredBy;
+    private LocalDateTime unregisteredAt;
 
     @CreatedDate
     private LocalDateTime createdAt;

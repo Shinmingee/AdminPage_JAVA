@@ -2,6 +2,8 @@ package com.example.toyproject001.repository;
 
 import com.example.toyproject001.Toyproject001ApplicationTests;
 import com.example.toyproject001.model.entity.AdminUser;
+import com.example.toyproject001.model.enumclass.AdminUserRole;
+import com.example.toyproject001.model.enumclass.AdminUserStatus;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +21,8 @@ public class AdminUserRepositoryTest extends Toyproject001ApplicationTests {
 
         String account = "AdminUser01";
         String password = "AdminUser01";
-        String status = "REGISTERED";
-        String role = "PARTNER";
+        AdminUserStatus status = AdminUserStatus.REGISTERED;
+        AdminUserRole role = AdminUserRole.PARTNER;
 //        LocalDateTime createdAt = LocalDateTime.now();
 //        String createdBy = "Admin Server";
 

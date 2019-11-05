@@ -2,6 +2,7 @@ package com.example.toyproject001.repository;
 
 import com.example.toyproject001.Toyproject001ApplicationTests;
 import com.example.toyproject001.model.entity.Partner;
+import com.example.toyproject001.model.enumclass.PartnerStatus;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class PartnerRepositoryTest extends Toyproject001ApplicationTests {
 
         String name = "Partner01";
         String address = "서울시 종로구 통인동";
-        String status = "REGISTERED";
+        PartnerStatus status = PartnerStatus.REGISTERED;
         String callCenter = "070-1111-2222";
         String partnerNumber = "010-1111-2222";
         String businessNumber = "1234567890123";

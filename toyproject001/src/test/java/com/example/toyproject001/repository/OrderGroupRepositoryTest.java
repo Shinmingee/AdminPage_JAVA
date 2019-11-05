@@ -2,6 +2,9 @@ package com.example.toyproject001.repository;
 
 import com.example.toyproject001.Toyproject001ApplicationTests;
 import com.example.toyproject001.model.entity.OrderGroup;
+import com.example.toyproject001.model.enumclass.OrderGroupOrderType;
+import com.example.toyproject001.model.enumclass.OrderGroupPaymentType;
+import com.example.toyproject001.model.enumclass.OrderGroupStatus;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +23,10 @@ public class OrderGroupRepositoryTest extends Toyproject001ApplicationTests {
 
         OrderGroup orderGroup = new OrderGroup();
 
-        orderGroup.setStatus("COMPLETE");
-        orderGroup.setOrderType("ALL");
+        orderGroup.setStatus(OrderGroupStatus.COMPLETE);
+        orderGroup.setOrderType(OrderGroupOrderType.ALL);
         orderGroup.setRevAddress("서울시 마포구 독박로12");
-        orderGroup.setPaymentType("CARD");
+        orderGroup.setPaymentType(OrderGroupPaymentType.CARD);
         orderGroup.setTotalPrice(BigDecimal.valueOf(1500000));
         orderGroup.setTotalQuantity(1);
         orderGroup.setOrderAt(LocalDateTime.now().minusDays(2));

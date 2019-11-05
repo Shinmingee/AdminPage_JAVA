@@ -1,5 +1,6 @@
 package com.example.toyproject001.model.entity;
 
+import com.example.toyproject001.model.enumclass.PartnerStatus;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.CreatedBy;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -27,7 +29,8 @@ public class Partner {
 
     private String name;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private PartnerStatus status; //파트너 상태: 등록(REGISTERED), 미등록(UNREGISTERED)
 
     private String address;
 
@@ -41,7 +44,7 @@ public class Partner {
 
     private LocalDateTime registeredAt;
 
-    private LocalDateTime unregisteredBy;
+    private LocalDateTime unregisteredAt;
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -58,4 +61,8 @@ public class Partner {
     //Partner N:1 Category
     @ManyToOne
     private Category category;
+
+    //Partner 1: N Item
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "partner")
+    private List<Item> itemList;
 }

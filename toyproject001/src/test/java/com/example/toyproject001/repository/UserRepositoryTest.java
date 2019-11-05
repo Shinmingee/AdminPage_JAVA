@@ -3,6 +3,7 @@ package com.example.toyproject001.repository;
 import com.example.toyproject001.Toyproject001ApplicationTests;
 import com.example.toyproject001.model.entity.Item;
 import com.example.toyproject001.model.entity.User;
+import com.example.toyproject001.model.enumclass.UserStatus;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class UserRepositoryTest extends Toyproject001ApplicationTests {
     public void crate(){
         String account = "Test01";
         String password = "Test01";
-        String status = "REGISTERED";
+        UserStatus status = UserStatus.REGISTERED;
         String email = "TEST01@test.com";
         String phoneNumber = "010-1111-2222";
         LocalDateTime registeredAt = LocalDateTime.now();
@@ -71,8 +72,8 @@ public class UserRepositoryTest extends Toyproject001ApplicationTests {
         //update user -> @Accessors(chain = true)
         user
                 .setEmail("")
-                .setPhoneNumber("")
-                .setStatus("");
+                .setPhoneNumber("");
+                //.setStatus("");
 
         User u = new User().setAccount("").setEmail("").setPassword("");
 
