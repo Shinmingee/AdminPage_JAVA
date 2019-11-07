@@ -20,7 +20,7 @@ public class OrderDetailRepositoryTest extends Toyproject001ApplicationTests {
     public void create(){
         OrderDetail orderDetail = new OrderDetail();
 
-        orderDetail.setStatus(OrderDetailStatus.WAITING);
+        orderDetail.setStatus(OrderDetailStatus.ORDERING);
         orderDetail.setArrivalDate(LocalDateTime.now().plusDays(2));
         orderDetail.setCreatedAt(LocalDateTime.now());
         orderDetail.setCreatedBy("Admin Server");

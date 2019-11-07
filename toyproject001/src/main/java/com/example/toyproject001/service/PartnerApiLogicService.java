@@ -8,10 +8,14 @@ import com.example.toyproject001.model.network.response.PartnerApiResponse;
 import com.example.toyproject001.repository.CategoryRepository;
 import com.example.toyproject001.repository.PartnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, PartnerApiResponse> {
@@ -42,7 +46,7 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
                 .build();
 
         Partner newPartner = partnerRepository.save(partner);
-        return response(newPartner);
+        return Header.OK(response(newPartner));
 
     }
 
@@ -52,6 +56,7 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
         Optional<Partner> optional = partnerRepository.findById(id);
 
         return optional.map(partner -> response(partner))
+                .map(partnerApiResponse -> Header.OK(partnerApiResponse))
                 .orElseGet(()->Header.ERROR("데이터 없음"));
 
     }
@@ -83,6 +88,7 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
                 //반환된 partner 값을 레파지토리에 저장, response에 저장된 partner entity를 넘겨준다.
                 .map(partner -> partnerRepository.save(partner))
                 .map(updatePartner -> response(updatePartner))
+                .map(partnerApiResponse -> Header.OK(partnerApiResponse))
                 .orElseGet(()->Header.ERROR("데이터 없음"));
 
     }
@@ -100,7 +106,7 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
     }
 
     //Entity -> response
-    public Header<PartnerApiResponse> response(Partner partner){
+    public PartnerApiResponse response(Partner partner){
 
         PartnerApiResponse body = PartnerApiResponse.builder()
                 .id(partner.getId())
@@ -120,6 +126,16 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
                 .categoryId(partner.getCategory().getId())
                 .build();
 
-        return Header.OK(body);
+        return body;
+    }
+
+    public Header<List<PartnerApiResponse>> search(Pageable pageable){
+        Page<Partner> partners = partnerRepository.findAll(pageable);
+
+        List<PartnerApiResponse> partnerApiResponseList = partners.stream()
+                .map(partner -> response(partner))
+                .collect(Collectors.toList());
+
+        return Header.OK(partnerApiResponseList);
     }
 }

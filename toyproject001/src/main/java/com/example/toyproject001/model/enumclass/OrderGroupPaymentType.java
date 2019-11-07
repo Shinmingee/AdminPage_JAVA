@@ -11,7 +11,7 @@ public enum  OrderGroupPaymentType {
 
     CARD(0,"카드","카드납부"),
     CASH(1,"현금", "현금납부"),
-    ACCOUNT(2,"계좌이체","계좌이체납부"),
+    BANK_TRANSFER(2,"계좌이체","계좌이체납부"),
     POINT(3, "포인트결제","포인트결제납부")
     ;
 

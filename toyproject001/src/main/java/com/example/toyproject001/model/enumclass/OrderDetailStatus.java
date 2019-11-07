@@ -8,8 +8,10 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum OrderDetailStatus {
-    WAITING(0, "대기", "주문 대기상태"),
-    COMPLETE(1,"완료", "주문 완료상태")
+
+    CONFIRM(0,"주문 확인", "주문 확인 상태"),
+    ORDERING(1,"주문진행중","주문 진행 상태"),
+    COMPLETE(2,"완료","주문 완료 상태")
     ;
 
     private Integer id;

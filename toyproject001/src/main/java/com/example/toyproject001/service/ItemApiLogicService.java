@@ -2,17 +2,22 @@ package com.example.toyproject001.service;
 
 import com.example.toyproject001.controller.ifs.CrudInterface;
 import com.example.toyproject001.model.entity.Item;
+import com.example.toyproject001.model.entity.User;
 import com.example.toyproject001.model.network.Header;
 import com.example.toyproject001.model.network.request.ItemApiRequest;
 import com.example.toyproject001.model.network.response.ItemApiResponse;
+import com.example.toyproject001.model.network.response.UserApiResponse;
 import com.example.toyproject001.repository.ItemRepository;
 import com.example.toyproject001.repository.PartnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
 
 
 @Service
@@ -43,7 +48,7 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
                 .build(); //Item 객체 하나 만들어서 담아놈
 
         Item newItem = itemRepository.save(item); //newItem 에 repository에 저장한 item 담음
-        return response(newItem);
+        return Header.OK(response(newItem));
     }
 
     @Override
@@ -55,6 +60,7 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
 
         return optional
                 .map(item -> response(item))
+                .map(itemApiResponse -> Header.OK(itemApiResponse))
                 .orElseGet(()->Header.ERROR("데이터 없음"));
 
     }
@@ -81,6 +87,7 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
         })
                 .map(item->itemRepository.save(item))
                 .map(updateItem->response(updateItem))
+                .map(itemApiResponse -> Header.OK(itemApiResponse))
                 .orElseGet(()->Header.ERROR("데이터 없음"));
 
     }
@@ -98,7 +105,7 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
 
 
     //response :
-    public Header<ItemApiResponse> response(Item item){
+    public ItemApiResponse response(Item item){
         //Item -> ItemApiResponse
         ItemApiResponse body = ItemApiResponse.builder()
                 .id(item.getId())
@@ -113,7 +120,18 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
                 .partnerId(item.getPartner().getId())
                 .build();
 
-        return Header.OK(body);
+        return body;
+
+    }
+
+    public Header<List<ItemApiResponse>> search(Pageable pageable){
+        Page<Item> items = itemRepository.findAll(pageable);
+
+        List<ItemApiResponse> itemApiResponsesList = items.stream()
+                .map(item -> response(item))
+                .collect(Collectors.toList());
+
+        return Header.OK(itemApiResponsesList);
 
     }
 

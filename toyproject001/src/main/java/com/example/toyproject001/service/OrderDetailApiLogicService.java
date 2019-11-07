@@ -9,10 +9,14 @@ import com.example.toyproject001.repository.ItemRepository;
 import com.example.toyproject001.repository.OrderDetailRepository;
 import com.example.toyproject001.repository.OrderGroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiRequest, OrderDetailApiResponse> {
@@ -49,7 +53,7 @@ public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiR
 
         OrderDetail newOrderDetail = orderDetailRepository.save(orderDetail);
 
-        return response(newOrderDetail);
+        return Header.OK(response(newOrderDetail));
     }
 
     @Override
@@ -58,6 +62,7 @@ public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiR
         Optional<OrderDetail> optional  = orderDetailRepository.findById(id);
 
         return optional.map(orderDetail -> response(orderDetail))
+                .map(orderDetailApiResponse -> Header.OK(orderDetailApiResponse))
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
 
     }
@@ -84,6 +89,7 @@ public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiR
         })
                 .map(orderDetail -> orderDetailRepository.save(orderDetail))
                 .map(updateOrderDetail -> response(updateOrderDetail))
+                .map(orderDetailApiResponse -> Header.OK(orderDetailApiResponse))
                 .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
@@ -100,7 +106,7 @@ public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiR
 
     }
 
-    public Header<OrderDetailApiResponse> response(OrderDetail orderDetail){
+    public OrderDetailApiResponse response(OrderDetail orderDetail){
         //Entity -> response
         OrderDetailApiResponse body = OrderDetailApiResponse.builder()
                 .id(orderDetail.getId())
@@ -114,7 +120,17 @@ public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiR
                 .orderGroupId(orderDetail.getOrderGroup().getId())
                 .build();
 
-        return Header.OK(body);
+        return body;
+    }
+
+    public Header<List<OrderDetailApiResponse>> search(Pageable pageable){
+        Page<OrderDetail> orderDetails = orderDetailRepository.findAll(pageable);
+
+        List<OrderDetailApiResponse> orderDetailApiResponseList = orderDetails.stream()
+                .map(orderDetail -> response(orderDetail))
+                .collect(Collectors.toList());
+
+        return Header.OK(orderDetailApiResponseList);
     }
 
 }

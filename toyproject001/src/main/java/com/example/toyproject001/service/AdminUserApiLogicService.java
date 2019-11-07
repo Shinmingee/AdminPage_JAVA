@@ -7,10 +7,14 @@ import com.example.toyproject001.model.network.request.AdminUserApiRequest;
 import com.example.toyproject001.model.network.response.AdminUserApiResponse;
 import com.example.toyproject001.repository.AdminUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AdminUserApiLogicService implements CrudInterface<AdminUserApiRequest, AdminUserApiResponse> {
@@ -37,7 +41,7 @@ public class AdminUserApiLogicService implements CrudInterface<AdminUserApiReque
                 .build();
         AdminUser newAdminUser = adminUserRepository.save(adminUser);
 
-        return response(newAdminUser);
+        return Header.OK(response(newAdminUser));
     }
 
     @Override
@@ -46,6 +50,7 @@ public class AdminUserApiLogicService implements CrudInterface<AdminUserApiReque
         Optional<AdminUser> optional = adminUserRepository.findById(id);
 
         return optional.map(adminUser -> response(adminUser))
+                .map(adminUserApiResponse -> Header.OK(adminUserApiResponse))
                 .orElseGet(()->Header.ERROR("데이터 없음!!"));
 
     }
@@ -75,6 +80,7 @@ public class AdminUserApiLogicService implements CrudInterface<AdminUserApiReque
         })
                 .map(adminUser-> adminUserRepository.save(adminUser))
                 .map(updateAdminUser -> response(updateAdminUser))
+                .map(adminUserApiResponse -> Header.OK(adminUserApiResponse))
                 .orElseGet(()->Header.ERROR("데이터 없음!!"));
     }
 
@@ -91,7 +97,7 @@ public class AdminUserApiLogicService implements CrudInterface<AdminUserApiReque
 
     }
 
-    public Header<AdminUserApiResponse> response(AdminUser adminUser){
+    public AdminUserApiResponse response(AdminUser adminUser){
 
         AdminUserApiResponse body = AdminUserApiResponse.builder()
                 .id(adminUser.getId())
@@ -110,7 +116,19 @@ public class AdminUserApiLogicService implements CrudInterface<AdminUserApiReque
                 .passwordUpdatedAt(adminUser.getPasswordUpdatedAt())
                 .build();
 
-        return Header.OK(body);
+        return body;
+    }
+
+    public Header<List<AdminUserApiResponse>> search(Pageable pageable){
+        Page<AdminUser> pages = adminUserRepository.findAll(pageable);
+
+        List<AdminUserApiResponse> adminUserApiResponseList = pages.stream()
+                .map(adminUser -> response(adminUser))
+                .collect(Collectors.toList());
+
+        return Header.OK(adminUserApiResponseList);
+
+
     }
 
 }

@@ -8,10 +8,14 @@ import com.example.toyproject001.model.network.response.OrderGroupApiResponse;
 import com.example.toyproject001.repository.OrderGroupRepository;
 import com.example.toyproject001.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiRequest, OrderGroupApiResponse> {
@@ -41,7 +45,7 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
                 .build();
 
         OrderGroup newOrderGroup = orderGroupRepository.save(orderGroup);
-        return response(newOrderGroup);
+        return Header.OK(response(newOrderGroup));
     }
 
     @Override
@@ -50,6 +54,7 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
         Optional<OrderGroup> optional = orderGroupRepository.findById(id);
 
         return optional.map(orderGroup -> response(orderGroup))
+                .map(orderGroupApiResponse -> Header.OK(orderGroupApiResponse))
                 .orElseGet(()->Header.ERROR("데이터 없음"));
 
     }
@@ -78,6 +83,7 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
         })
                 .map(orderGroup -> orderGroupRepository.save(orderGroup))
                 .map(updateOrderGroup->response(updateOrderGroup))
+                .map(orderGroupApiResponse -> Header.OK(orderGroupApiResponse))
                 .orElseGet(()->Header.ERROR("데이터 없음"));
     }
 
@@ -93,7 +99,7 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
     }
 
 
-    public Header<OrderGroupApiResponse> response(OrderGroup orderGroup){
+    public OrderGroupApiResponse response(OrderGroup orderGroup){
         //OrderGroup -> OrderGroupResponse
         OrderGroupApiResponse orderGroupApiResponse = OrderGroupApiResponse.builder()
                 .id(orderGroup.getId())
@@ -107,7 +113,16 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
                 .orderAt(orderGroup.getOrderAt())
                 .userId(orderGroup.getUser().getId())
                 .build();
-        return Header.OK(orderGroupApiResponse);
+        return orderGroupApiResponse;
     }
 
+    public Header<List<OrderGroupApiResponse>> search(Pageable pageable){
+
+        Page<OrderGroup> orderGroups = orderGroupRepository.findAll(pageable);
+
+        List<OrderGroupApiResponse> orderGroupApiResponseList = orderGroups.stream()
+                .map(orderGroup -> response(orderGroup))
+                .collect(Collectors.toList());
+        return Header.OK(orderGroupApiResponseList);
+    }
 }

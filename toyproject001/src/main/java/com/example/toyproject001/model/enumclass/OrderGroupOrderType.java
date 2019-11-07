@@ -12,7 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 public enum  OrderGroupOrderType {
 
     ALL(0, "일괄", "일괄주문"),
-    INDIVIDUAL(1, "개별", "개별주문")
+    EACH(1, "개별", "개별주문")
     ;
 
     private Integer id;

@@ -7,10 +7,14 @@ import com.example.toyproject001.model.network.request.CategoryApiRequest;
 import com.example.toyproject001.model.network.response.CategoryApiResponse;
 import com.example.toyproject001.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryApiLogicService implements CrudInterface<CategoryApiRequest, CategoryApiResponse> {
@@ -31,7 +35,7 @@ public class CategoryApiLogicService implements CrudInterface<CategoryApiRequest
                 .build();
 
         Category newCategory = categoryRepository.save(category);
-        return response(newCategory);
+        return Header.OK(response(newCategory));
     }
 
     @Override
@@ -39,6 +43,7 @@ public class CategoryApiLogicService implements CrudInterface<CategoryApiRequest
 
         Optional<Category> optional = categoryRepository.findById(id);
         return optional.map(category -> response(category))
+                .map(categoryApiResponse -> Header.OK(categoryApiResponse))
                 .orElseGet(()->Header.ERROR("데이터 없음!"));
 
     }
@@ -61,6 +66,7 @@ public class CategoryApiLogicService implements CrudInterface<CategoryApiRequest
                 })
                 .map(category -> categoryRepository.save(category))
                 .map(updateCategory->response(updateCategory))
+                .map(categoryApiResponse -> Header.OK(categoryApiResponse))
                 .orElseGet(()->Header.ERROR("데이터 없음!"));
     }
 
@@ -75,7 +81,7 @@ public class CategoryApiLogicService implements CrudInterface<CategoryApiRequest
                 .orElseGet(()->Header.ERROR("데이터 없음!"));
     }
 
-    public Header<CategoryApiResponse> response(Category category){
+    public CategoryApiResponse response(Category category){
 
         CategoryApiResponse categoryApiResponse = CategoryApiResponse.builder()
                 .id(category.getId())
@@ -87,6 +93,17 @@ public class CategoryApiLogicService implements CrudInterface<CategoryApiRequest
                 .updatedBy(category.getUpdatedBy())
                 .build();
 
-        return Header.OK(categoryApiResponse);
+        return categoryApiResponse;
+    }
+
+    public Header<List<CategoryApiResponse>> search (Pageable pageable){
+        Page<Category> categories = categoryRepository.findAll(pageable);
+
+        List<CategoryApiResponse> categoryApiResponseList = categories.stream()
+                .map(category -> response(category))
+                .collect(Collectors.toList());
+
+        return Header.OK(categoryApiResponseList);
+
     }
 }

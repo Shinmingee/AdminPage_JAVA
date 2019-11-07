@@ -1,5 +1,6 @@
 package com.example.toyproject001.controller.api;
 
+import com.example.toyproject001.controller.CrudController;
 import com.example.toyproject001.controller.ifs.CrudInterface;
 import com.example.toyproject001.model.network.Header;
 import com.example.toyproject001.model.network.request.OrderDetailApiRequest;
@@ -9,38 +10,45 @@ import com.example.toyproject001.service.OrderDetailApiLogicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
+
 @RestController
 @RequestMapping("/api/orderDetail")
-public class OrderDetailApiController implements CrudInterface<OrderDetailApiRequest, OrderDetailApiResponse> {
+public class OrderDetailApiController extends CrudController<OrderDetailApiRequest, OrderDetailApiResponse> {
 
     @Autowired
     private OrderDetailApiLogicService orderDetailApiLogicService;
 
-    @Override
-    @PostMapping("") // /api/orderDetail
-    public Header<OrderDetailApiResponse> create(@RequestBody Header<OrderDetailApiRequest> request) {
-
-        return orderDetailApiLogicService.create(request);
+    @PostConstruct
+    public void init(){
+        this.baseService = orderDetailApiLogicService;
     }
 
-    @Override
-    @GetMapping("{id}") // /api/orderDetail/1
-    public Header<OrderDetailApiResponse> read(@PathVariable Long id) {
-
-        return orderDetailApiLogicService.read(id);
-    }
-
-    @Override
-    @PutMapping("")
-    public Header<OrderDetailApiResponse> update(@RequestBody Header<OrderDetailApiRequest> request) {
-
-        return orderDetailApiLogicService.update(request);
-    }
-
-    @Override
-    @DeleteMapping("{id}")
-    public Header delete(@PathVariable Long id) {
-
-        return orderDetailApiLogicService.delete(id);
-    }
+//    @Override
+//    @PostMapping("") // /api/orderDetail
+//    public Header<OrderDetailApiResponse> create(@RequestBody Header<OrderDetailApiRequest> request) {
+//
+//        return orderDetailApiLogicService.create(request);
+//    }
+//
+//    @Override
+//    @GetMapping("{id}") // /api/orderDetail/1
+//    public Header<OrderDetailApiResponse> read(@PathVariable Long id) {
+//
+//        return orderDetailApiLogicService.read(id);
+//    }
+//
+//    @Override
+//    @PutMapping("")
+//    public Header<OrderDetailApiResponse> update(@RequestBody Header<OrderDetailApiRequest> request) {
+//
+//        return orderDetailApiLogicService.update(request);
+//    }
+//
+//    @Override
+//    @DeleteMapping("{id}")
+//    public Header delete(@PathVariable Long id) {
+//
+//        return orderDetailApiLogicService.delete(id);
+//    }
 }
